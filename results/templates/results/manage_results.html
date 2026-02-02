@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .results-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+
+    /* Header Section */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        gap: 20px;
+    }
+
+    .page-header h2 {
+        margin: 0 0 8px 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .results-badge {
+        background: #f3f4f6;
+        color: #374151;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* Mock Filter Buttons */
+    .filter-section {
+        margin-bottom: 25px;
+    }
+
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filter-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: white;
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover {
+        background: #f9fafb;
+        border-color: #9ca3af;
+        color: #1f2937;
+    }
+
+    .filter-btn.active {
+        background: #1f2937;
+        color: white;
+        border-color: #1f2937;
+    }
+
+    /* Search Section */
+    .search-section {
+        margin-bottom: 25px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+        max-width: 500px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-btn {
+        padding: 12px 24px;
+        background: #6b7280;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .search-btn:hover {
+        background: #4b5563;
+    }
+
+    /* Results Grid */
+    .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 24px;
+    }
+
+    .result-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .result-card:hover {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    /* Student Header */
+    .student-header {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .student-photo {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        border: 2px solid #e5e7eb;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .student-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .student-name {
+        margin: 0 0 6px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2937;
+        word-break: break-word;
+    }
+
+    .student-index {
+        display: block;
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 8px;
+    }
+
+    .mock-badge {
+        display: inline-block;
+        background: #f3f4f6;
+        color: #374151;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Divider */
+    .divider {
+        border: none;
+        border-top: 1px solid #e5e7eb;
+        margin: 20px 0;
+    }
+
+    /* Card Actions */
+    .card-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        flex: 1;
+        min-width: 80px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid;
+    }
+
+    .btn-view {
+        background: white;
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    .btn-view:hover {
+        background: #eff6ff;
+    }
+
+    .btn-edit {
+        background: white;
+        border-color: #6b7280;
+        color: #6b7280;
+    }
+
+    .btn-edit:hover {
+        background: #f9fafb;
+    }
+
+    .btn-delete {
+        background: white;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    .btn-delete:hover {
+        background: #fef2f2;
+    }
+
+    /* Empty State */
+    .empty-state {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 80px 20px;
+        color: #6b7280;
+    }
+
+    .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .results-container {
+            padding: 20px 15px;
+        }
+
+        .page-header {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .page-header h2 {
+            font-size: 26px;
+        }
+
+        .page-header p {
+            font-size: 14px;
+        }
+
+        .results-badge {
+            align-self: flex-start;
+        }
+
+        .filter-buttons {
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .search-form {
+            max-width: 100%;
+            flex-direction: column;
+        }
+
+        .search-input,
+        .search-btn {
+            width: 100%;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .results-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .result-card {
+            padding: 20px;
+        }
+
+        .student-header {
+            gap: 12px;
+        }
+
+        .student-photo {
+            width: 70px;
+            height: 70px;
+        }
+
+        .student-name {
+            font-size: 15px;
+        }
+
+        .card-actions {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 100%;
+            min-width: auto;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .results-container {
+            padding: 15px 10px;
+        }
+
+        .page-header h2 {
+            font-size: 22px;
+        }
+
+        .result-card {
+            padding: 16px;
+        }
+
+        .filter-btn {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .student-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .student-photo {
+            width: 100px;
+            height: 100px;
+        }
+    }
+</style>
+
+<div class="results-container">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h2>Manage Results</h2>
+            <p>View and manage uploaded candidate results</p>
+        </div>
+        <div class="results-badge">
+            {{ count }} Result{{ count|pluralize }}
+        </div>
+    </div>
+
+    <!-- Mock Filter Buttons -->
+    <div class="filter-section">
+        <div class="filter-buttons">
+            <a href="{% url 'manage_results' %}"
+               class="filter-btn {% if not mock %}active{% endif %}">
+                All Mocks
+            </a>
+
+            {% for m in mock_numbers %}
+                <a href="?mock={{ m }}"
+                   class="filter-btn {% if mock == m %}active{% endif %}">
+                    Mock {{ m }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-section">
+        <form method="get" class="search-form">
+            {% if mock %}
+                <input type="hidden" name="mock" value="{{ mock }}">
+            {% endif %}
+
+            <input type="text"
+                   name="q"
+                   value="{{ query }}"
+                   class="search-input"
+                   placeholder="Search by index number or name...">
+            <button type="submit" class="search-btn">
+                🔍 Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Result Cards -->
+    <div class="results-grid">
+        {% for r in results %}
+        <div class="result-card">
+
+            <!-- Student Header -->
+            <div class="student-header">
+                {% if r.student.photo %}
+                    <img src="{{ r.student.photo.url }}"
+                         class="student-photo"
+                         alt="{{ r.student.full_name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/80x80/e5e7eb/6b7280?text=No+Photo"
+                         class="student-photo"
+                         alt="No photo">
+                {% endif %}
+
+                <div class="student-info">
+                    <h6 class="student-name">
+                        {{ r.student.full_name }}
+                    </h6>
+                    <small class="student-index">
+                        {{ r.student.index_number }}
+                    </small>
+                    <span class="mock-badge">
+                        Mock {{ r.mock_number }}
+                    </span>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Actions -->
+            <div class="card-actions">
+                <a href="{% url 'view_student_mock' %}?student={{ r.student.id }}&mock={{ r.mock_number }}"
+                   class="action-btn btn-view">
+                    👁️ View
+                </a>
+
+                <button class="action-btn btn-edit"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editResultModal{{ r.id }}">
+                    ✏️ Edit
+                </button>
+
+                <button class="action-btn btn-delete"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteMockModal{{ r.id }}">
+                    🗑️ Delete
+                </button>
+            </div>
+
+        </div>
+
+        <!-- MODALS -->
+        {% include "results/modals/_edit_result_modal.html" with result=r %}
+        {% include "results/modals/_delete_mock_modal.html" with result=r %}
+
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <p>No results found.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

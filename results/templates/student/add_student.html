@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #b8860b;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f4c430;
+            box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.1);
+        }
+
+        input[type="file"] {
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #f4c430;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            transition: background 0.3s ease;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #e6b800;
+        }
+
+        .btn {
+            width: 100%;
+            background: #f4c430;
+            color: #000;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(244, 196, 48, 0.2);
+        }
+
+        .btn:hover {
+            background: #e6b800;
+            box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .full {
+            grid-column: span 2;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px 20px;
+                border-radius: 6px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .full {
+                grid-column: span 1;
+            }
+
+            input {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .btn {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 18px;
+            }
+
+            .grid {
+                gap: 18px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            input {
+                padding: 12px;
+            }
+
+            input[type="file"]::file-selector-button {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* Better form validation styling */
+        input:invalid:not(:placeholder-shown) {
+            border-color: #ff6b6b;
+        }
+
+        input:valid:not(:placeholder-shown) {
+            border-color: #51cf66;
+        }
+    </style>
+
+<div class="container">
+    <h2>Candidate Information</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="full_name">Candidate Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="index_number">Index Number</label>
+                <input type="text" id="index_number" name="index_number" placeholder="e.g. 10345678" required>
+            </div>
+
+            <div class="form-group">
+                <label for="access_code">Access Code</label>
+                <input type="text" id="access_code" name="access_code" placeholder="Unique access code" required>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Photo</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Save Student</button>
+    </form>
+</div>
+
+{% endblock %}

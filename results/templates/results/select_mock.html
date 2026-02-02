@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="card-body text-center">
+
+            <h5 class="fw-bold mb-3">Select Mock Examination</h5>
+
+            <p class="text-muted">
+                Candidate: <strong>{{ student.full_name }}</strong>
+            </p>
+
+            <div class="d-grid gap-2">
+                {% for mock in mocks %}
+                <a href="{% url 'student_results' %}?mock={{ mock }}"
+                   class="btn btn-outline-dark">
+                    {{ mock }}
+                </a>
+                {% empty %}
+                <p class="text-muted">No results available.</p>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

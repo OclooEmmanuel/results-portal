@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Detail</title>
+</head>
+<body>
+    <h1>{{ student.name }}</h1>
+    <p>Index Number: {{ student.indexnumber }}</p>
+    <h2>Results:</h2>
+    <ul>
+        {% for result in results %}
+            <li>{{ result.subject }}: {{ result.grade }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

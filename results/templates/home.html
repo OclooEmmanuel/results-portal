@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* ===== Smooth & Professional Animations ===== */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(35px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+        opacity: 0;
+        animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+
+    /* ===== Typography – Academic & Readable ===== */
+    .display-academic {
+        font-size: clamp(2.8rem, 6.5vw, 4.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.8px;
+        color: #1a1f36; /* Darker, serious tone */
+    }
+
+    .lead-academic {
+        font-size: 1.3rem;
+        line-height: 1.75;
+        max-width: 640px;
+        font-weight: 400;
+        color: #4a5568;
+    }
+
+    h5.section-title {
+        font-size: 1.65rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1.25rem;
+    }
+
+    /* ===== Cards – Clean & Institutional ===== */
+    .feature-card {
+        border: none;
+        border-radius: 1rem;
+        background: #ffffff;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: all 0.35s ease;
+        overflow: hidden;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    }
+
+    .feature-icon {
+        font-size: 3.2rem;
+        margin-bottom: 1.25rem;
+        color: #4e73df; /* Primary accent */
+    }
+
+    /* ===== Buttons – Professional & Trustworthy ===== */
+    .btn-academic {
+        padding: 0.8rem 2.1rem;
+        font-weight: 600;
+        border-radius: 0.6rem;
+        letter-spacing: 0.4px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-academic:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .btn-outline-secondary.btn-academic:hover {
+        background-color: #4a5568;
+        color: white;
+        border-color: #4a5568;
+    }
+
+    /* ===== Spacing & Layout Helpers ===== */
+    section { padding: 6rem 0; }
+    @media (max-width: 991px) { section { padding: 4.5rem 0; } }
+    @media (max-width: 767px) { section { padding: 3.5rem 0; } }
+
+    .section-header { margin-bottom: 4rem; text-align: center; }
+    .feature-row { row-gap: 2.5rem; }
+
+    /* ===== Hero Image ===== */
+    .hero-img {
+        border-radius: 1.2rem;
+        box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+        max-height: 420px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    @media (max-width: 991px) {
+        .hero-img { max-height: 340px; }
+    }
+</style>
+
+<div class="container">
+
+    <!-- HERO SECTION – Clear, Authoritative, Trust-Building -->
+    <section class="pt-5 pt-md-6">
+        <div class="row align-items-center gx-5">
+            <div class="col-lg-6 fade-up">
+                <h1 class="display-academic mb-4">
+                    Academic Results Portal
+                </h1>
+
+                <p class="lead-academic text-muted mb-5">
+                    A secure and efficient platform for students, teachers, and administrators to access, manage, and report examination performance with precision and confidence.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'check_results' %}"
+                       class="btn btn-primary btn-lg btn-academic shadow">
+                        View Results
+                    </a>
+                    <a href="{% url 'manage_results' %}"
+                       class="btn btn-outline-secondary btn-lg btn-academic">
+                        Manage Records
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mt-5 mt-lg-0 text-center fade-up delay-1">
+                <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80"
+                     class="img-fluid hero-img"
+                     alt="Secure academic performance dashboard"
+                     width="720" height="480" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES – Balanced Grid with Proper Spacing -->
+    <section class="bg-light rounded-3 mx-n3 px-3 px-md-4 py-5">
+        <div class="section-header fade-up">
+            <h2 class="section-title">Key Features</h2>
+            <p class="text-muted lead" style="max-width: 720px; margin: 0 auto;">
+                Designed to support the full cycle of academic assessment — from data entry to secure student access.
+            </p>
+        </div>
+
+        <div class="row feature-row text-center">
+            <div class="col-md-4 fade-up delay-1">
+                <div class="card feature-card h-100 p-4 p-lg-5">
+                    <span class="feature-icon">📊</span>
+                    <h5 class="section-title">Secure Student Access</h5>
+                    <p class="text-muted">
+                        Students view their results instantly and privately using secure credentials — anytime, anywhere.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 fade-up delay-2">
+                <div class="card feature-card h-100 p-4 p-lg-5">
+                    <span class="feature-icon">🛡️</span>
+                    <h5 class="section-title">Accurate Record Management</h5>
+                    <p class="text-muted">
+                        Administrators upload, verify, and update examination data with built-in validation tools.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 fade-up delay-3">
+                <div class="card feature-card h-100 p-4 p-lg-5">
+                    <span class="feature-icon">📄</span>
+                    <h5 class="section-title">Professional Reports</h5>
+                    <p class="text-muted">
+                        Generate clear, printable performance summaries with grades, totals, and analytical insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA – Centered, Motivational for Schools -->
+    <section class="text-center">
+        <div class="card border-0 shadow-lg bg-white rounded-3 overflow-hidden fade-up delay-2 mx-auto"
+             style="max-width: 860px;">
+            <div class="card-body py-5 py-lg-6 px-4 px-lg-5">
+                <h3 class="section-title mb-4" style="font-size: 2.25rem;">
+                    Empower Your Institution with Reliable Results Management
+                </h3>
+
+                <p class="lead-academic text-muted mb-5 mx-auto" style="max-width: 680px;">
+                    Simplify examination workflows, ensure data integrity, and provide transparent access for your entire school community.
+                </p>
+
+                <a href="{% url 'check_results' %}"
+                   class="btn btn-primary btn-lg btn-academic shadow">
+                    Get Started Today
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

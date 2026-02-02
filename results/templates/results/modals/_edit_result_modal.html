@@ -1,0 +1,108 @@
+
+        <div class="modal fade" id="editResultModal{{ r.id }}" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+
+                    <form method="post" action="{% url 'edit_result' r.id %}">
+                        {% csrf_token %}
+
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold">
+                                Edit Results — {{ r.student.full_name }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Mathematics</label>
+                                    <input type="number" name="maths" value="{{ r.maths }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">English</label>
+                                    <input type="number" name="english" value="{{ r.english }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Science</label>
+                                    <input type="number" name="science" value="{{ r.science }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                 <div class="col-md-4">
+                                    <label class="form-label">Social Studies</label>
+                                    <input type="number" name="social_studies" value="{{ r.social_studies}}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+
+
+                                <div class="col-md-4">
+                                    <label class="form-label">R.M.E</label>
+                                    <input type="number" name="rme" value="{{ r.rme }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Computing</label>
+                                    <input type="number" name="computing" value="{{ r.computing }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Career Tech</label>
+                                    <input type="number" name="carear_tech" value="{{ r.carear_tech }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">CAD</label>
+                                    <input type="number" name="cad" value="{{ r.cad }}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Asante Twi</label>
+                                    <input type="number" name="asante_twi" value="{{ r.asante_twi}}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                 <div class="col-md-4">
+                                    <label class="form-label">French</label>
+                                    <input type="number" name="french" value="{{ r.rench}}"
+                                           class="form-control" min="0" max="100" required>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <label class="form-label">Remark</label>
+                                    <input type="text" name="remark" value="{{ r.remark }}"
+                                           class="form-control">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="btn btn-dark">
+                                Save Changes
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>

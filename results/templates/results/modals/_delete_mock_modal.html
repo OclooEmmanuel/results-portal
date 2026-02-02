@@ -1,0 +1,40 @@
+<div class="modal fade" id="deleteMockModal{{ result.id }}" tabindex="-1" aria-labelledby="deleteMockModalLabel{{ result.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="deleteMockModalLabel{{ result.id }}">
+          Delete Mock Result
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <p>
+          Are you sure you want to delete the results of
+          <strong>{{ result.student.full_name }}</strong>
+          for <strong>Mock {{ result.mock_number }}</strong>?
+        </p>
+        <p class="text-danger small mb-0">
+          This action cannot be undone.
+        </p>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <form method="post" action="{% url 'delete_mock_result' result.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            Yes, Delete
+          </button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

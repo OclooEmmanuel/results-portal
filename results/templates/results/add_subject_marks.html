@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Add Results{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h4 class="mb-3">WAEC Result Entry</h4>
+        
+    <!-- ALERTS -->
+    <!-- {% for message in messages %}
+        {{ message }}
+    {% endfor %} -->
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- STUDENT SELECTION -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Index Number</label>
+                <select name="student" class="form-select" id="studentSelect" required>
+                    <option value="">-----Select Student-----</option>
+                    {% for student in students %}
+                        <option value="{{ student.id }}" data-name="{{ student.full_name }}">
+                            {{ student.index_number }} - {{ student.full_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Student Name</label>
+                <input type="text" id="studentName" class="form-control" readonly>
+            </div>
+        </div>
+
+        <!-- MOCK NUMBER -->
+        <div class="mb-4">
+            <label class="form-label">Mock Number</label>
+            <input type="text" name="mock_number" class="form-control" required>
+        </div>
+
+        <!-- SUBJECT GRID -->
+       <div class="row g-3">
+        {% for field, label in subjects %}
+            <div class="col-md-4 pe-2">
+                <label class="form-label">{{ label }}</label>
+                <input type="number"
+                    name="{{ field }}"
+                    class="form-control"
+                    min="0"
+                    max="100"
+                    required>
+            </div>
+        {% endfor %}
+       </div>
+
+
+        <button class="btn btn-warning mt-4">Save Results</button>
+    </form>
+</div>
+
+<!-- AUTO-FILL STUDENT NAME -->
+<script>
+document.getElementById("studentSelect").addEventListener("change", function () {
+    const selected = this.options[this.selectedIndex];
+    document.getElementById("studentName").value = selected.dataset.name || "";
+});
+</script>
+
+{% endblock %}

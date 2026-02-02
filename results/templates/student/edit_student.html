@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #b8860b;
+            margin-bottom: 25px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f4c430;
+        }
+
+        .btn {
+            margin-top: 30px;
+            background: #f4c430;
+            color: #000;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #e6b800;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Candidate Information</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="grid">
+            <div>
+                <label>Candidate Full Name</label>
+                <input type="text" name="full_name" value="{{ student.full_name }}" required>
+            </div>
+
+            <div>
+                <label>Index Number</label>
+                <input type="text" name="index_number" value="{{ student.index_number }}" required>
+            </div>
+
+            <div>
+                <label>Access Code</label>
+                <input type="text" name="access_code" value="{{ student.access_code }}" required>
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Update Student</button>
+    </form>
+</div>
+
+</body>
+</html>
