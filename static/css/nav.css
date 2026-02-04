@@ -338,3 +338,28 @@
         height: 24px;
     }
 }
+
+/* ───────── PRINT MODE ───────── */
+@media print {
+
+    /* Hide navigation + breadcrumbs */
+    .top-navbar,
+    .navbar-container,
+    .header-section,
+    .breadcrumbs {
+        display: none !important;
+    }
+
+    /* Remove page spacing */
+    body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .page {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+}
+

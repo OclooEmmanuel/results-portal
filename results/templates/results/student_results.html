@@ -9,72 +9,74 @@
 <div class="result-slip-container">
 
     <!-- Result Slip -->
-    <div class="result-slip">
+ <div class="print-area"></div>
+        <div class="result-slip">
 
-        <!-- Header -->
-        <div class="slip-header">
-            <h4>CANDIDATE RESULT SLIP</h4>
-            <small>Mock Examination</small>
-        </div>
-
-        <div class="slip-body">
-
-            <!-- Candidate Details -->
-            <div class="candidate-details">
-                <div class="detail-section detail-left">
-                    <p><strong>Candidate Name:</strong> {{ student.full_name }}</p>
-                    <p><strong>Index Number:</strong> {{ student.index_number }}</p>
-                </div>
-                <div class="detail-section detail-right">
-                    <p><strong>Mock Number:</strong> {{ mock_number }}</p>
-                    <p><strong>Overall Result:</strong>
-                        <span class="result-status {% if overall_result == 'PASS' %}text-success{% else %}text-danger{% endif %}">
-                            {{ overall_result }}
-                        </span>
-                    </p>
-                </div>
+            <!-- Header -->
+            <div class="slip-header">
+                <h4>CANDIDATE RESULT SLIP</h4>
+                <small>Mock Examination</small>
             </div>
 
-            <!-- Result Table -->
-            <div class="table-container">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Score</th>
-                            <th>Grade</th>
-                            <th>Interpretation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in subjects %}
-                        <tr>
-                            <td>{{ s.subject }}</td>
-                            <td>{{ s.score }}</td>
-                            <td class="grade-cell">{{ s.grade }}</td>
-                            <td>{{ s.remark }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <div class="slip-body">
 
-            <!-- Summary -->
-            <div class="summary-section">
-                <div class="summary-item">
-                    <strong>Total Score</strong>
-                    <span>{{ total }}</span>
+                <!-- Candidate Details -->
+                <div class="candidate-details">
+                    <div class="detail-section detail-left">
+                        <p><strong>Candidate Name:</strong> {{ student.full_name }}</p>
+                        <p><strong>Index Number:</strong> {{ student.index_number }}</p>
+                    </div>
+                    <div class="detail-section detail-right">
+                        <p><strong>Mock Number:</strong> {{ mock_number }}</p>
+                        <p><strong>Overall Result:</strong>
+                            <span class="result-status {% if overall_result == 'PASS' %}text-success{% else %}text-danger{% endif %}">
+                                {{ overall_result }}
+                            </span>
+                        </p>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <strong>Average Score</strong>
-                    <span>{{ average }}</span>
+
+                <!-- Result Table -->
+                <div class="table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Interpretation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in subjects %}
+                            <tr>
+                                <td>{{ s.subject }}</td>
+                                <td>{{ s.score }}</td>
+                                <td class="grade-cell">{{ s.grade }}</td>
+                                <td>{{ s.remark }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div class="summary-item">
-                    <strong>Aggregate</strong>
-                    <span>{{ aggregate }}</span>
+
+                <!-- Summary -->
+                <div class="summary-section">
+                    <div class="summary-item">
+                        <strong>Total Score</strong>
+                        <span>{{ total }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Average Score</strong>
+                        <span>{{ average }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Aggregate</strong>
+                        <span>{{ aggregate }}</span>
+                    </div>
                 </div>
             </div>
-
+            
             <hr class="divider">
 
             <!-- Footer -->
@@ -83,9 +85,10 @@
                     This is a computer-generated result slip.
                 </small>
 
-                <button onclick="window.print()" class="print-btn">
+                <button onclick="window.scrollTo(0,0); window.print();" class="print-btn">
                     Print Result
                 </button>
+
             </div>
 
         </div>

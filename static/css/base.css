@@ -1,4 +1,6 @@
-/* Update body and html for sticky footer */
+/* ================================
+   GLOBAL & STICKY FOOTER SETUP
+================================ */
 html, body {
     height: 100%;
     margin: 0;
@@ -9,11 +11,13 @@ body {
     flex-direction: column;
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #f59e0b;
+    background-color: #f59e0b; /* WAEC yellow */
     color: #222;
 }
 
-/* Header */
+/* ================================
+   HEADER
+================================ */
 .header {
     background-color: #ffffff;
     border-bottom: 4px solid #f4c430;
@@ -26,7 +30,9 @@ body {
     font-size: 22px;
 }
 
-/* Navigation */
+/* ================================
+   NAVIGATION
+================================ */
 .nav {
     margin-top: 20px;
 }
@@ -43,13 +49,18 @@ body {
     color: #b8860b;
 }
 
-/* Page container - make it grow to push footer down */
+/* ================================
+   MAIN PAGE CONTENT
+   (pushes footer down)
+================================ */
 .page {
     flex: 1;
     padding: 30px;
 }
 
-/* Footer - updated to stick to bottom */
+/* ================================
+   FOOTER (STICKY)
+================================ */
 .footer {
     margin-top: auto;
     background: #ffffff;
@@ -85,7 +96,9 @@ body {
     color: #999;
 }
 
-/* Responsive */
+/* ================================
+   RESPONSIVE
+================================ */
 @media (max-width: 768px) {
     .footer {
         font-size: 11px;
@@ -101,223 +114,9 @@ body {
     }
 }
 
-/* Print - hide footer */
-@media print {
-    .footer {
-        display: none;
-    }
-}/* Update body and html for sticky footer */
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f59e0b;
-    color: #222;
-}
-
-/* Header */
-.header {
-    background-color: #ffffff;
-    border-bottom: 4px solid #f4c430;
-    padding: 15px 30px;
-}
-
-.header h1 {
-    margin: 0;
-    color: #b8860b;
-    font-size: 22px;
-}
-
-/* Navigation */
-.nav {
-    margin-top: 20px;
-}
-
-.nav a {
-    margin-right: 20px;
-    text-decoration: none;
-    color: #444;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.nav a:hover {
-    color: #b8860b;
-}
-
-/* Page container - make it grow to push footer down */
-.page {
-    flex: 1;
-    padding: 30px;
-}
-
-/* Footer - updated to stick to bottom */
-.footer {
-    margin-top: auto;
-    background: #ffffff;
-    border-top: 4px solid #f4c430;
-    text-align: center;
-    padding: 20px 15px;
-    font-size: 13px;
-    color: #666;
-}
-
-.footer p {
-    margin: 5px 0;
-}
-
-.footer-links {
-    margin-top: 8px;
-}
-
-.footer-links a {
-    color: #b8860b;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #f59e0b;
-    text-decoration: underline;
-}
-
-.separator {
-    margin: 0 8px;
-    color: #999;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .footer {
-        font-size: 11px;
-        padding: 15px 10px;
-    }
-
-    .footer-links a {
-        font-size: 11px;
-    }
-
-    .separator {
-        margin: 0 5px;
-    }
-}
-
-/* Print - hide footer */
-@media print {
-    .footer {
-        display: none;
-    }
-}/* Update body and html for sticky footer */
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f59e0b;
-    color: #222;
-}
-
-/* Header */
-.header {
-    background-color: #ffffff;
-    border-bottom: 4px solid #f4c430;
-    padding: 15px 30px;
-}
-
-.header h1 {
-    margin: 0;
-    color: #b8860b;
-    font-size: 22px;
-}
-
-/* Navigation */
-.nav {
-    margin-top: 20px;
-}
-
-.nav a {
-    margin-right: 20px;
-    text-decoration: none;
-    color: #444;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.nav a:hover {
-    color: #b8860b;
-}
-
-/* Page container - make it grow to push footer down */
-.page {
-    flex: 1;
-    padding: 30px;
-}
-
-/* Footer - updated to stick to bottom */
-.footer {
-    margin-top: auto;
-    background: #ffffff;
-    border-top: 4px solid #f4c430;
-    text-align: center;
-    padding: 20px 15px;
-    font-size: 13px;
-    color: #666;
-}
-
-.footer p {
-    margin: 5px 0;
-}
-
-.footer-links {
-    margin-top: 8px;
-}
-
-.footer-links a {
-    color: #b8860b;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #f59e0b;
-    text-decoration: underline;
-}
-
-.separator {
-    margin: 0 8px;
-    color: #999;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .footer {
-        font-size: 11px;
-        padding: 15px 10px;
-    }
-
-    .footer-links a {
-        font-size: 11px;
-    }
-
-    .separator {
-        margin: 0 5px;
-    }
-}
-
-/* Print - hide footer */
+/* ================================
+   PRINT (WAEC SLIP)
+================================ */
 @media print {
     .footer {
         display: none;

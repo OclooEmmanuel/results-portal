@@ -15,7 +15,10 @@ SECRET_KEY = 'django-insecure-pcx&k2m#rqp6j+uoyvz^1(+#ouq%j4yv0aoq$i-b18_6*$=$_0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# for production
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 
 ]
 
@@ -115,6 +119,8 @@ STATICFILES_DIRS = [  BASE_DIR / 'static',]
 
 # for production later
 # STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # image files
 MEDIA_URL ='media/'
