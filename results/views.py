@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student, Result
 from django.contrib import messages
 from django.db.models import Q
-
+from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'home.html')
 
@@ -17,7 +17,7 @@ def student_detail(request, indexnumber):
 
     pass  # Placeholder for student detail view
 
-
+@login_required
 def add_student(request):
     if request.method == "POST":
         full_name = request.POST.get("full_name")
@@ -43,7 +43,7 @@ def add_student(request):
 
 
 
-
+login_required
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
@@ -54,7 +54,9 @@ def edit_student(request, student_id):
             student.access_code = request.POST.get("access_code")
 
             if request.FILES.get("photo"):
-                student.FILES.get["photo"]
+                if student.photo:
+                    student.photo.delete(save=False)
+                student.photo = request.FILES.get("photo")
 
             student.save()
             messages.success(request, "Student details updated successfully")
@@ -69,7 +71,7 @@ def edit_student(request, student_id):
 
 
 
-
+@login_required
 def delete_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
@@ -109,7 +111,7 @@ def check_results(request):
     return render(request, "results/check_results.html", {"error": error})
 
 
-
+@login_required
 def add_subject_marks(request):
     students = Student.objects.all().order_by("index_number")
 
@@ -162,7 +164,7 @@ def add_subject_marks(request):
     )
 
 
-
+@login_required
 def edit_result(request, result_id):
     result = get_object_or_404(Result, id=result_id)
 
@@ -209,7 +211,7 @@ def edit_result(request, result_id):
 
 
 
-
+@login_required
 def manage_results(request):
     query = request.GET.get("q", "")
     mock = request.GET.get("mock", "")
@@ -374,7 +376,7 @@ def student_results(request,):
 
 
 # ---------------------------------------------------------
-
+@login_required
 def view_student_mock(request):
     # Get student + mock from URL
     student_id = request.GET.get("student")
@@ -439,6 +441,8 @@ def view_student_mock(request):
 
     return render(request, "results/admin_student_results.html", context)
 
+
+@login_required(login_url="admin_login")
 def delete_mock_result(request, result_id):
     result = get_object_or_404(Result, id=result_id)
 
