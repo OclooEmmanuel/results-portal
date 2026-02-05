@@ -96,11 +96,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     raise Exception("No DATABASE_URL set for production!")
 
 DATABASES = {
-  "default": dj_database_url.config(
-        default="postgresql://results_db_snte_user:JBZuqD4Ipoc5eWwvJzeam324WCCSiA3n@dpg-d61t0ronputs7385v300-a/results_db_snte",
-        conn_max_age=600,
-        ssl_require=True,
-    )
+  "default": dj_database_url.parse( "postgresql://results_db_snte_user:JBZuqD4Ipoc5eWwvJzeam324WCCSiA3n@dpg-d61t0ronputs7385v300-a.frankfurt-postgres.render.com/results_db_snte")
 }
 
 
