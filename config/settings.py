@@ -1,10 +1,14 @@
 import dj_database_url
 from pathlib import Path
 import os
-# import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# Load environment variables from .env
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -12,17 +16,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-pcx&k2m#rqp6j+uoyvz^1(+#ouq%j4yv0aoq$i-b18_6*$=$_0'
 
-SECRET_KEY = "django-insecure-yfe)2!@(mu1c6_xs&nl3k1uzd#6job)tj%sjhfxd0$!mh*!"
+SECRET_KEY = os.getenv("SECRET_KEY")
 # ...existing code...
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-
 # for production
-DEBUG = False
+# DEBUG = False
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "results-port.onrender.com"]
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost", "results-port.onrender.com"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+
 
 
 # Application definition
@@ -88,13 +94,13 @@ DATABASES = {
 # if not DATABASE_URL:
 #     raise Exception("No DATABASE_URL set for production!")
 
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         default=DATABASE_URL,
-#         conn_max_age=600,
-#         ssl_require=True,
-#     )
-# }
+DATABASES = {
+  "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
 
 
 # Password validation
