@@ -97,7 +97,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     "default": dj_database_url.parse( "postgresql://results_db_2qws_user:B1pgpo0dz7NlUQjTgtGBILLfCVFOI6Z5@dpg-d627qv24d50c73883g60-a/results_db_2qws"), 
-    ssl_require=True,
  }
 
 # DATABASES = {
