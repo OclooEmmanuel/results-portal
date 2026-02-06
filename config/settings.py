@@ -108,15 +108,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.config("postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres",
-        conn_max_age=600,           # 10 min – good balance for pooled connections
-        conn_health_checks=True,    # Auto-detect bad connections
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),  # ← This must find it!
+        conn_max_age=600,                        # Good for pooled connections
+        conn_health_checks=True,
     )
 }
 
-DATABASES['default']['OPTIONS'] = {
-    'sslmode': 'require',       # Mandatory for Supabase
-}
+# Force SSL (Supabase requires it)
+DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
