@@ -95,9 +95,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # if not DATABASE_URL:
 #     raise Exception("No DATABASE_URL set for production!")
 
-DATABASES = {
-    "default": dj_database_url.parse( "postgresql://results_db_2qws_user:B1pgpo0dz7NlUQjTgtGBILLfCVFOI6Z5@dpg-d627qv24d50c73883g60-a/results_db_2qws"), 
- }
+# DATABASES = {
+#     "default": dj_database_url.parse( "postgresql://results_db_2qws_user:B1pgpo0dz7NlUQjTgtGBILLfCVFOI6Z5@dpg-d627qv24d50c73883g60-a/results_db_2qws"), 
+#  }
 
 # DATABASES = {
 #     "default": dj_database_url.config(
@@ -107,6 +107,16 @@ DATABASES = {
 #     )
 # }
 
+DATABASES = {
+    'default': dj_database_url.config("postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+        conn_max_age=600,           # 10 min – good balance for pooled connections
+        conn_health_checks=True,    # Auto-detect bad connections
+    )
+}
+
+DATABASES['default']['OPTIONS'] = {
+    'sslmode': 'require',       # Mandatory for Supabase
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
