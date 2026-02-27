@@ -14,7 +14,6 @@ def student_list(request):
 
 
 def student_detail(request, indexnumber):
-
     pass  # Placeholder for student detail view
 
 @login_required
@@ -248,49 +247,6 @@ def manage_results(request):
 
 
 # ---------------------------------------------------------
-def get_grade(score):
-    """
-    Grade Scale (1–9)
-    """
-    if score >= 85:
-        return 1
-    elif score >= 80:
-        return 2
-    elif score >= 75:
-        return 3
-    elif score >= 70:
-        return 4
-    elif score >= 60:
-        return 5
-    elif score >= 50:
-        return 6
-    elif score >= 45:
-        return 7
-    elif score >= 40:
-        return 8
-    else:
-        return 9
-
-
-def get_grade_remark(grade):
-    """
-    Official Interpretation
-    """
-    remarks = {
-        1: "Highest",
-        2: "Higher",
-        3: "High",
-        4: "High Average",
-        5: "Average",
-        6: "Low Average",
-        7: "Low",
-        8: "Lower",
-        9: "Lowest",
-    }
-    return remarks.get(grade, "")
-
-
-
 
 def student_results(request,):
     student_id = request.session.get("student_id")
@@ -346,8 +302,8 @@ def student_results(request,):
     aggregate = 0
 
     for subject, score in subjects:
-        grade = get_grade(score)
-        remark = get_grade_remark(grade)
+        grade = Result.get_grade(score)
+        remark = Result.get_grade_remark(grade)
 
         total_score += score
         aggregate += grade
@@ -413,8 +369,8 @@ def view_student_mock(request):
     aggregate = 0
 
     for subject, score in subjects:
-        grade = get_grade(score)
-        remark = get_grade_remark(grade)
+        grade = Result.get_grade(score)
+        remark = Result.get_grade_remark(grade)
 
         total_score += score
         aggregate += grade

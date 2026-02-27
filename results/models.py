@@ -13,7 +13,7 @@ class Student(models.Model):
 
 
 class Result(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='results')
     mock_number = models.CharField(max_length=2, blank=True)
 
     maths = models.IntegerField()
@@ -26,8 +26,6 @@ class Result(models.Model):
     cad = models.IntegerField()
     asante_twi = models.IntegerField()
     french = models.IntegerField()
-
-
     remark = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
@@ -36,12 +34,44 @@ class Result(models.Model):
     def __str__(self):
         return f"{self.student} - Mock {self.mock_number}"
 
-"""  def total(self):
-        return self.maths + self.english + self.science + self.rme + self.ict
 
-    def average(self):
-        return self.total() / 5
+    def get_grade(score):
+        """
+        Grade Scale (1-9)
+        """
+        if score >= 85:
+            return 1
+        elif score >= 80:
+            return 2
+        elif score >= 75:
+            return 3
+        elif score >= 70:
+            return 4
+        elif score >= 60:
+            return 5
+        elif score >= 50:
+            return 6
+        elif score >= 45:
+            return 7
+        elif score >= 40:
+            return 8
+        else:
+            return 9
 
-    def __str__(self):
-        return f"{self.student}'s mock {self.mock_number} Result"
-"""
+
+    def get_grade_remark(grade):
+        """
+        Official Interpretation
+        """
+        remarks = {
+            1: "Highest",
+            2: "Higher",
+            3: "High",
+            4: "High Average",
+            5: "Average",
+            6: "Low Average",
+            7: "Low",
+            8: "Lower",
+            9: "Lowest",
+        }
+        return remarks.get(grade,'')

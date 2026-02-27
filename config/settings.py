@@ -1,7 +1,9 @@
-import dj_database_url
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +22,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # ...existing code...
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 # for production
 # DEBUG = False
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost", "results-port.onrender.com"]
@@ -41,8 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'results',
+    'students',
     'authen',
-
 ]
 
 MIDDLEWARE = [
@@ -89,18 +91,31 @@ DATABASES = {
     }
 }
 
-# DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# if not DATABASE_URL:
-#     raise Exception("No DATABASE_URL set for production!")
-
+# Database – super clean(real)
 DATABASES = {
-  "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True,
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600,           # Good for pooling
+        conn_health_checks=True,
     )
 }
+
+
+# without .env
+DATABASES = {
+    'default': dj_database_url.config(
+        default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+        conn_max_age=600,           # Good for pooling
+        conn_health_checks=True,
+    )
+}
+
+
+# # Force SSL (Supabase requires it)
+# DATABASES['default']['OPTIONS'] = {
+#     'sslmode': 'require',
+#     }
 
 
 # Password validation
