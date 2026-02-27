@@ -95,9 +95,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # if not DATABASE_URL:
 #     raise Exception("No DATABASE_URL set for production!")
 
+# DATABASES = {
+#     "default": dj_database_url.parse( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"), 
+#  }
+
 DATABASES = {
-    "default": dj_database_url.parse( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"), 
- }
+    'default': dj_database_url.config(
+        default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+        conn_max_age=600,           # Good for pooling
+        conn_health_checks=True,
+    )
+}
 
 # DATABASES = {
 #     "default": dj_database_url.config(
