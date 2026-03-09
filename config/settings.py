@@ -16,7 +16,7 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pcx&k2m#rqp6j+uoyvz^1(+#ouq%j4yv0aoq$i-b18_6*$=$_0'
+# SECRET_KEY = 'django-insecure-pcx&k2m#rqp6j+uoyvz^1(+#ouq%j4yv0aoq$i-b18_6*$=$_0'
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 # ...existing code...
@@ -93,23 +93,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database – super clean(real)
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.getenv('DATABASE_URL'),
-#         conn_max_age=600,           # Good for pooling
-#         conn_health_checks=True,
-#     )
-# }
-
-
-# without .env
 DATABASES = {
     'default': dj_database_url.config(
-        default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=600,           # Good for pooling
         conn_health_checks=True,
     )
 }
+
+
+# without .env
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+#         conn_max_age=600,           # Good for pooling
+#         conn_health_checks=True,
+#     )
+# }
 
 
 # # Force SSL (Supabase requires it)
