@@ -247,7 +247,7 @@ def manage_results(request):
 
 
 # ---------------------------------------------------------
-
+"""
 def student_results(request,):
     student_id = request.session.get("student_id")
 
@@ -326,6 +326,118 @@ def student_results(request,):
     }
 
     return render(request, "results/student_results.html", context )
+"""
+
+
+def student_results(request):
+    student_id = request.session.get("student_id")
+
+    if not student_id:
+        return redirect("check_results")
+
+    student = get_object_or_404(Student, id=student_id)
+
+    # Get mock from URL
+    mock_number = request.GET.get("mock")
+
+    # Get all available mocks for this student
+    available_mocks = (
+        Result.objects.filter(student=student)
+        .values_list("mock_number", flat=True)
+        .distinct()
+    )
+
+    # If no mock selected → show selection page
+    if not mock_number:
+        return render(
+            request,
+            "results/select_mock.html",
+            {
+                "student": student,
+                "mocks": available_mocks,
+            },
+        )
+
+    # If invalid mock → redirect safely
+    if mock_number not in available_mocks:
+        return redirect("student_results")
+
+    # Fetch result
+    result = Result.objects.get(
+        student=student,
+        mock_number=mock_number,
+    )
+
+    subjects = [
+        ("Mathematics", result.maths),
+        ("English Language", result.english),
+        ("Integrated Science", result.science),
+        ("Social Studies", result.social_studies),
+        ("R.M.E", result.rme),
+        ("Computing", result.computing),
+        ("Career Technology", result.carear_tech),
+        ("Creative Arts & Design", result.cad),
+        ("Asante Twi", result.asante_twi),
+        ("French", result.french),
+    ]
+
+    subject_results = []
+    total_score = 0
+
+    core_grades = []
+    elective_grades = []
+
+    for subject, score in subjects:
+
+        grade = result.get_grade(score)
+        remark = result.get_grade_remark(grade)
+
+        total_score += score
+
+        # Core subjects
+        if subject in [
+            "Mathematics",
+            "English Language",
+            "Integrated Science",
+            "Social Studies",
+        ]:
+            core_grades.append(grade)
+
+        else:
+            elective_grades.append(grade)
+
+        subject_results.append(
+            {
+                "subject": subject,
+                "score": score,
+                "grade": grade,
+                "remark": remark,
+            }
+        )
+
+    # BEST TWO ELECTIVES
+    best_two = sorted(elective_grades)[:2]
+
+    aggregate = sum(core_grades) + sum(best_two)
+
+    average = round(total_score / len(subjects), 2)
+
+    overall_result = "PASS" if average >= 50 else "FAIL"
+
+    context = {
+        "student": student,
+        "mock_number": mock_number,
+        "subjects": subject_results,
+        "total": total_score,
+        "average": average,
+        "aggregate": aggregate,
+        "overall_result": overall_result,
+    }
+
+    return render(request, "results/student_results.html", context)
+
+
+
 
 
 # ---------------------------------------------------------
