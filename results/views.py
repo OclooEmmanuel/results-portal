@@ -345,6 +345,7 @@ def student_results(request,):
         "subjects": subject_results,
         "total": total_score,
         "aggregate": aggregate,
+        "overall_result": overall_result,
     }
 
     return render(request, "results/student_results.html", context )
