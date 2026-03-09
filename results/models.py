@@ -34,7 +34,7 @@ class Result(models.Model):
     def __str__(self):
         return f"{self.student} - Mock {self.mock_number}"
 
-
+    @staticmethod
     def get_grade( score):
         """
         Grade Scale (1-9)
@@ -58,7 +58,7 @@ class Result(models.Model):
         else:
             return 9
 
-
+    @staticmethod
     def get_grade_remark(grade):
         """
         Official Interpretation

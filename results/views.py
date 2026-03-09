@@ -296,14 +296,13 @@ def student_results(request,):
 
     subject_results = []
     total_score = 0
-    aggregate = 0
 
     for subject, score in subjects:
         grade = Result.get_grade(score)
         remark = Result.get_grade_remark(grade)
 
         total_score += score
-        aggregate += grade
+
 
         subject_results.append({
             "subject": subject,
@@ -312,7 +311,32 @@ def student_results(request,):
             "remark": remark,
         })
 
+     # ---------- BECE AGGREGATE CALCULATION ----------
+
+    core_grades = [
+        Result.get_grade(result.english),
+        Result.get_grade(result.maths),
+        Result.get_grade(result.science),
+        Result.get_grade(result.social_studies),
+    ]
+
+    elective_grades = [
+        Result.get_grade(result.rme),
+        Result.get_grade(result.computing),
+        Result.get_grade(result.carear_tech),
+        Result.get_grade(result.cad),
+        Result.get_grade(result.asante_twi),
+        Result.get_grade(result.french),
+    ]
+
+    best_two = sorted(elective_grades)[:2]
+
+    aggregate = sum(core_grades) + sum(best_two)
+
+    # -----------------------------------------------
+
     average = round(total_score / len(subjects), 2)
+
     overall_result = "PASS" if average >= 50 else "FAIL"
 
     context = {
@@ -320,9 +344,7 @@ def student_results(request,):
         "mock_number": mock_number,
         "subjects": subject_results,
         "total": total_score,
-        "average": average,
         "aggregate": aggregate,
-        "overall_result": overall_result,
     }
 
     return render(request, "results/student_results.html", context )
@@ -331,17 +353,14 @@ def student_results(request,):
 # ---------------------------------------------------------
 @login_required
 def view_student_mock(request):
-    # Get student + mock from URL
     student_id = request.GET.get("student")
     mock_number = request.GET.get("mock")
 
-    # Safety check
     if not student_id:
         return redirect("check_results")
 
     student = get_object_or_404(Student, id=student_id)
 
-    # Fetch result
     result = get_object_or_404(
         Result,
         student=student,
@@ -363,14 +382,12 @@ def view_student_mock(request):
 
     subject_results = []
     total_score = 0
-    aggregate = 0
 
     for subject, score in subjects:
         grade = Result.get_grade(score)
         remark = Result.get_grade_remark(grade)
 
         total_score += score
-        aggregate += grade
 
         subject_results.append({
             "subject": subject,
@@ -379,7 +396,32 @@ def view_student_mock(request):
             "remark": remark,
         })
 
+    # ---------- BECE AGGREGATE CALCULATION ----------
+
+    core_grades = [
+        Result.get_grade(result.english),
+        Result.get_grade(result.maths),
+        Result.get_grade(result.science),
+        Result.get_grade(result.social_studies),
+    ]
+
+    elective_grades = [
+        Result.get_grade(result.rme),
+        Result.get_grade(result.computing),
+        Result.get_grade(result.carear_tech),
+        Result.get_grade(result.cad),
+        Result.get_grade(result.asante_twi),
+        Result.get_grade(result.french),
+    ]
+
+    best_two = sorted(elective_grades)[:2]
+
+    aggregate = sum(core_grades) + sum(best_two)
+
+    # -----------------------------------------------
+
     average = round(total_score / len(subjects), 2)
+
     overall_result = "PASS" if average >= 50 else "FAIL"
 
     context = {
