@@ -22,9 +22,9 @@ SECRET_KEY = 'django-insecure-pcx&k2m#rqp6j+uoyvz^1(+#ouq%j4yv0aoq$i-b18_6*$=$_0
 # ...existing code...
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 # for production
-# DEBUG = False
+DEBUG = False
 # DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
