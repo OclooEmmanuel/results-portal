@@ -77,30 +77,4 @@ class Result(models.Model):
         return remarks.get(grade,'')
 
 
-    def calculate_aggregate(self):
-    # Core subjects
-        core_subjects = [
-                self.get_grade(self.english),
-                self.get_grade(self.maths),
-                self.get_grade(self.science),
-                self.get_grade(self.social_studies),
-            ]
-
-        core_total = sum(core_subjects)
-
-    # Elective subjects
-        electives = [
-                self.get_grade(self.rme),
-                self.get_grade(self.computing),
-                self.get_grade(self.carear_tech),
-                self.get_grade(self.cad),
-                self.get_grade(self.asante_twi),
-                self.get_grade(self.french),
-            ]
-
-            # Best two electives (lowest grades)
-        best_two = sorted(electives)[:2]
-
-        aggregate = core_total + sum(best_two)
-
-        return aggregate
+    
