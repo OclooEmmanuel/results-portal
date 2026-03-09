@@ -261,10 +261,7 @@ def student_results(request,):
 
     # Get all available mocks for this student
     available_mocks = (
-        Result.objects
-        .filter(student=student)
-        .values_list("mock_number", flat=True)
-        .distinct()
+        Result.objects.filter(student=student).values_list("mock_number", flat=True).distinct()
     )
 
     # If no mock selected → show mock selection

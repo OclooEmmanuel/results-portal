@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Database – super clean(real)
@@ -103,19 +103,19 @@ DATABASES = {
 
 
 # without .env
-DATABASES = {
-    'default': dj_database_url.config(
-        default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
-        conn_max_age=600,           # Good for pooling
-        conn_health_checks=True,
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=( "postgresql://postgres.lfnlcezieopmrqgegnnm:Magneutron01$@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"),
+#         conn_max_age=600,           # Good for pooling
+#         conn_health_checks=True,
+#     )
+# }
 
 
 # # Force SSL (Supabase requires it)
-# DATABASES['default']['OPTIONS'] = {
-#     'sslmode': 'require',
-#     }
+DATABASES['default']['OPTIONS'] = {
+    'sslmode': 'require',
+    }
 
 
 # Password validation
