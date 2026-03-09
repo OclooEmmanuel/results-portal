@@ -35,7 +35,7 @@ class Result(models.Model):
         return f"{self.student} - Mock {self.mock_number}"
 
 
-    def get_grade(self, score):
+    def get_grade( score):
         """
         Grade Scale (1-9)
         """
@@ -59,7 +59,7 @@ class Result(models.Model):
             return 9
 
 
-    def get_grade_remark(self,grade):
+    def get_grade_remark(grade):
         """
         Official Interpretation
         """
@@ -77,4 +77,3 @@ class Result(models.Model):
         return remarks.get(grade,'')
 
 
-    
