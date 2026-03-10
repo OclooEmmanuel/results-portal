@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'results',
     'students',
     'authen',
+
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -167,7 +169,46 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL ='/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
+# Auth
 LOGIN_URL = "/staff/login/"
 LOGIN_REDIRECT_URL = "/result/manage/"
 LOGOUT_REDIRECT_URL = "/staff/login/"
+
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+#supabase storage
+# Supabase Storage (S3-compatible)
+AWS_ACCESS_KEY_ID = "8590e173b6e980f8d5091eefa42d6a0d"        # From Supabase Dashboard → Storage → S3 Access Keys
+AWS_SECRET_ACCESS_KEY = "6b2048c23098e7b81abdd4b4e1c06d94be3f188cca6b65a0b43f6a77e9967083"    # Same location
+AWS_STORAGE_BUCKET_NAME = "images"
+AWS_S3_ENDPOINT_URL = "https://lfnlcezieopmrqgegnnm.supabase.co/storage/v1/s3"
+AWS_S3_REGION_NAME = "eu-west-1"
+AWS_DEFAULT_ACL = "public-read"
+AWS_S3_FILE_OVERWRITE = False
+AWS_QUERYSTRING_AUTH = False
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+# with .env
+# settings.py
+
+# AWS_ACCESS_KEY_ID = os.getenv("SUPABASE_S3_ACCESS_KEY")
+# AWS_SECRET_ACCESS_KEY = os.getenv("SUPABASE_S3_SECRET_KEY")
+# AWS_STORAGE_BUCKET_NAME = os.getenv("SUPABASE_BUCKET")
+# AWS_S3_ENDPOINT_URL = "https://lfnlcezieopmrqgegnnm.supabase.co/storage/v1/s3"
+# AWS_S3_REGION_NAME = "eu-west-1"
+# AWS_DEFAULT_ACL = "public-read"
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_QUERYSTRING_AUTH = False
+
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
