@@ -178,10 +178,10 @@ LOGOUT_REDIRECT_URL = "/staff/login/"
 
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": "config.storage_backends.SupabaseStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
@@ -192,14 +192,14 @@ AWS_SECRET_ACCESS_KEY = "6b2048c23098e7b81abdd4b4e1c06d94be3f188cca6b65a0b43f6a7
 AWS_STORAGE_BUCKET_NAME = "images"
 AWS_S3_ENDPOINT_URL = "https://lfnlcezieopmrqgegnnm.supabase.co/storage/v1/s3"
 AWS_S3_REGION_NAME = "eu-west-1"
-AWS_DEFAULT_ACL = "public-read"
 AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
-AWS_S3_SIGNATURE_VERSION = "s3v4"  # usually needed for non-AWS S3
-AWS_S3_ADDRESSING_STYLE = "virtual"
-AWS_S3_CUSTOM_DOMAIN = "lfnlcezieopmrqgegnnm.supabase.co/storage/v1/object/public/images"
+AWS_S3_ADDRESSING_STYLE = "path"
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# AWS_S3_CUSTOM_DOMAIN = "lfnlcezieopmrqgegnnm.supabase.co/storage/v1/object/public/images"
+
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 # with .env
