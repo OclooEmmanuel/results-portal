@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Import Students &middot; School Results Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/student/student_import.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="h4 mb-1">Import Students From CSV</h1>
+            <p class="text-muted mb-0">
+                Create a whole cohort at once. Nothing is saved until you
+                confirm the preview.
+            </p>
+        </div>
+        {% comment %} <a class="btn btn-sm btn-outline-secondary" href="{% url 'student_list' %}">
+            Back to students
+        </a> {% endcomment %}
+    </div>
+
+    {% if rows is None %}
+
+        {# ---------- STEP 1: upload ---------- #}
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <form method="post" enctype="multipart/form-data" class="card">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Choose a file</h2>
+                        <input class="form-control" type="file" name="file" id="file"
+                               accept=".csv,.txt,.tsv,text/csv" required>
+                        <div class="form-text">
+                            Comma, semicolon or tab separated. UTF-8, up to
+                            5,000 rows.
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white d-flex gap-2 justify-content-end">
+                        <a class="btn btn-outline-secondary" href="{% url 'student_list' %}">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Preview import</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Expected columns</h2>
+                        <table class="table table-sm mb-3">
+                            <thead>
+                                <tr><th>Column</th><th>Required</th><th>Notes</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>full_name</code></td>
+                                    <td>Yes</td>
+                                    <td>Also accepted: <code>name</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>index_number</code></td>
+                                    <td>Yes</td>
+                                    <td>Must be unique. Also accepted: <code>index_no</code>, <code>index</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>access_code</code></td>
+                                    <td>No</td>
+                                    <td>Left blank? One is generated.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a class="btn btn-sm btn-outline-secondary"
+                           href="{% url 'student_import' %}?template=csv">
+                            Download a template
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h2 class="h6 text-uppercase text-muted mb-2">What happens</h2>
+                        <ul class="small mb-0 ps-3">
+                            <li>Index numbers that already exist are
+                                <strong>skipped</strong>, never overwritten.</li>
+                            <li>Bad rows are reported by line number and left
+                                out; the rest still import.</li>
+                            <li>Duplicate index numbers inside one file are
+                                rejected as errors.</li>
+                            <li>Nothing is written until you confirm.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        {# ---------- STEP 2: preview + confirm ---------- #}
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <div class="card border-success h-100">
+                    <div class="card-body py-3">
+                        <div class="fs-4 fw-bold">{{ new_count }}</div>
+                        <div class="small text-muted text-uppercase">Will be created</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body py-3">
+                        <div class="fs-4 fw-bold">{{ skip_count }}</div>
+                        <div class="small text-muted text-uppercase">Skipped (already exist)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card {% if error_count %}border-danger{% endif %} h-100">
+                    <div class="card-body py-3">
+                        <div class="fs-4 fw-bold">{{ error_count }}</div>
+                        <div class="small text-muted text-uppercase">Rejected (bad rows)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="confirm" value="1">
+
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="small text-muted">Preview &mdash; nothing saved yet</span>
+                    <span class="small text-muted">{{ rows|length }} row(s) read</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Line</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Index number</th>
+                                <th scope="col">Access code</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                                <tr class="{% if row.status == 'error' %}table-danger{% elif row.status == 'skip' %}table-secondary{% endif %}">
+                                    <td class="small text-muted">{{ row.line }}</td>
+                                    <td>{{ row.full_name|default:"&mdash;" }}</td>
+                                    <td class="font-monospace small">{{ row.index_number|default:"&mdash;" }}</td>
+                                    <td class="font-monospace small">
+                                        {% if row.access_code %}
+                                            {{ row.access_code }}
+                                            {% if row.generated %}
+                                                <span class="badge text-bg-light border">generated</span>
+                                            {% endif %}
+                                        {% else %}
+                                            &mdash;
+                                        {% endif %}
+                                    </td>
+                                    <td class="small">
+                                        {% if row.status == 'new' %}
+                                            <span class="text-success fw-semibold">Create</span>
+                                        {% elif row.status == 'skip' %}
+                                            <span class="text-muted">Skip</span>
+                                            <span class="d-block text-muted">{{ row.reason }}</span>
+                                        {% else %}
+                                            <span class="text-danger fw-semibold">Error</span>
+                                            <span class="d-block text-muted">{{ row.reason }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                    <span class="small text-muted">
+                        {% if new_count %}
+                            {{ new_count }} student(s) will be created.
+                        {% else %}
+                            Nothing will be created &mdash; every row was skipped or rejected.
+                        {% endif %}
+                    </span>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-secondary"
+                           href="{% url 'student_import' %}">Start over</a>
+                        <button class="btn btn-success" type="submit"
+                                {% if not new_count %}disabled{% endif %}>
+                            Import {{ new_count }} student{{ new_count|pluralize }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    {% endif %}
+
+</div>
+{% endblock %}

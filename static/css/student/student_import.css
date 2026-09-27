@@ -1,0 +1,52 @@
+/* ==========================================================================
+   STUDENT CSV IMPORT — student_import.css
+   The preview table is the screen that matters: staff have to be able to scan
+   300 rows and see at a glance which will be created, skipped or rejected.
+   ========================================================================== */
+
+.card-header {
+    font-weight: 600;
+}
+
+/* Row status is carried by a text label in its own column, so the background
+   tints below are reinforcement, not the only signal. */
+.table-danger > td,
+.table-danger > th {
+    background-color: rgba(220, 53, 69, 0.07);
+}
+
+.table-secondary > td,
+.table-secondary > th {
+    color: #6c757d;
+}
+
+/* Keep the numbers aligned when a staff member scans a column of index
+   numbers for a duplicate. */
+.table .font-monospace {
+    white-space: nowrap;
+}
+
+.badge.text-bg-light {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+code {
+    color: #0a58ca;
+    background: #f1f3f5;
+    padding: 0.1rem 0.3rem;
+}
+
+/* The file input is the primary control; give it room to breathe. */
+input[type="file"] {
+    padding: 0.6rem;
+    background: #f8f9fa;
+    border: 1px dashed #adb5bd;
+}
+
+input[type="file"]:focus {
+    border-color: #0d6efd;
+    background: #fff;
+}

@@ -1,5 +1,21 @@
 db.sqlite3
+db.sqlite3-journal
 media/
 venv/
+.venv/
 api
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+
+# Django / collectstatic output
+staticfiles/
+
+# Tooling
+.idea/
+.vscode/
+.DS_Store

@@ -1,88 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Student, Result
+from .models import Result
+from students.models import Student
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+
+
 def home(request):
     return render(request, 'home.html')
-
-#--------------------------------------student views-----------------------------
-
-def student_list(request):
-    students = Student.objects.all()
-    return render(request, "student/student_list.html", {"students": students})
-
-
-def student_detail(request, indexnumber):
-    pass  # Placeholder for student detail view
-
-@login_required
-def add_student(request):
-    if request.method == "POST":
-        full_name = request.POST.get("full_name")
-        index_number = request.POST.get("index_number")
-        access_code = request.POST.get("access_code")
-        photo = request.FILES.get("photo")
-
-        if Student.objects.filter(index_number=index_number).exists():
-            messages.error(request, "Index number already exists")
-            return redirect("add_student")
-
-        Student.objects.create(
-            full_name=full_name,
-            index_number=index_number,
-            access_code=access_code,
-            photo=photo
-        )
-
-        messages.success(request, "Student added successfully")
-        return redirect("add_student")
-
-    return render(request, "student/add_student.html")
-
-
-
-login_required
-def edit_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-
-    if request.method == "POST":
-        try:
-            student.full_name = request.POST.get("full_name")
-            student.index_number = request.POST.get("index_number")
-            student.access_code = request.POST.get("access_code")
-
-            if request.FILES.get("photo"):
-                if student.photo:
-                    student.photo.delete(save=False)
-                student.photo = request.FILES.get("photo")
-
-            student.save()
-            messages.success(request, "Student details updated successfully")
-        except Exception as e:
-            messages.error(request, f"Error updating student: {str(e)}")
-
-        return redirect("student_list")
-
-    # If GET request, return to the list page
-    return redirect("student_list")
-
-
-
-
-@login_required
-def delete_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-
-    if request.method == "POST":
-        student.delete()
-        messages.success(request, f"Student {student.full_name} deleted successfully!")
-        return redirect("student_list")
-
-    # If GET request, render a confirmation page
-    return render(request, "student/delete_student.html", {"student": student})
-
-
 
 
 #--------------------student result access views---------------------------
@@ -171,8 +96,8 @@ def edit_result(request, result_id):
         return redirect("manage_results")
 
     fields = [
-        "maths", "english", "science", "rme",
-        "computing", "carear_tech", "cad"
+        "maths", "english", "science", "social_studies", "rme",
+        "computing", "carear_tech", "cad", "asante_twi", "french",
     ]
 
     for field in fields:
@@ -344,6 +269,7 @@ def student_results(request,):
         "mock_number": mock_number,
         "subjects": subject_results,
         "total": total_score,
+        "average": average,
         "aggregate": aggregate,
         "overall_result": overall_result,
     }

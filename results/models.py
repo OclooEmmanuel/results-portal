@@ -1,19 +1,13 @@
 from django.db import models
-
-class Student(models.Model):
-    full_name = models.CharField(max_length=100)
-    index_number = models.CharField(max_length=20, unique=True)
-    access_code = models.CharField(max_length=20)
-    photo = models.ImageField(upload_to="students/",blank=True, null=True)
-
-    def __str__(self):
-        return self.full_name
-
-
+from students.models import Student
 
 
 class Result(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='results')
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name="results",
+    )
     mock_number = models.CharField(max_length=2, blank=True)
 
     maths = models.IntegerField()

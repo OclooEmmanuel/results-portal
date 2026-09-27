@@ -14,8 +14,7 @@
 
         <!-- Header -->
         <div class="slip-header">
-            <h4>CANDIDATE RESULT SLIP</h4>
-            <small>Mock Examination</small>
+            <h4>MOCK EXAMINATION RESULT SLIP</h4>
         </div>
 
         <div class="slip-body">
@@ -69,13 +68,13 @@
             </div>
 
             <!-- Summary -->
-            <div class="summary-section">
+            {% comment %} <div class="summary-section">
                 <div class="summary-item">
                     <p><strong>Total Score:</strong> {{ total }}</p>
                 </div>
                 <div class="summary-item">
                     <p><strong>Average Score:</strong> {{ average }}</p>
-                </div>
+                </div> {% endcomment %}
                 <div class="summary-item">
                     <p><strong>Aggregate:</strong> {{ aggregate }}</p>
                 </div>
@@ -85,10 +84,6 @@
 
             <!-- Footer -->
             <div class="slip-footer">
-                <small class="footer-note">
-                    This is a computer-generated result slip.
-                </small>
-
                 <button onclick="window.print()" class="print-btn">
                     Print Result
                 </button>

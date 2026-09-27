@@ -21,6 +21,23 @@
 
     <!-- Main Content -->
     <main class="flex-fill">
+        {% comment %}
+        Rendered here so every page shows them. Previously only
+        add_subject_marks.html looped over messages itself, so an error raised
+        by a view was invisible on every other page in the project.
+        {% endcomment %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+                         role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>

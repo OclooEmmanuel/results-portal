@@ -39,6 +39,12 @@
                         </svg>
                         Students
                     </a>
+                    <a href="{% url 'student_import' %}" class="nav-link">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Import CSV
+                    </a>
 
                     <!-- Logout Button - Only show if user is authenticated and NOT on login page -->
                     {% if request.resolver_match.url_name != 'login' %}
@@ -70,31 +76,6 @@
 
         </div>
     </nav>
-
-    <!-- Breadcrumbs - Hide on home and check_results when not logged in -->
-    {% if user.is_authenticated or request.resolver_match.url_name not in 'home,check_results' %}
-    <div class="breadcrumbs">
-        <div class="breadcrumbs-container">
-            <div class="breadcrumb-item">
-                <a href="{% url 'home' %}">Home</a>
-            </div>
-
-            {% if request.resolver_match.url_name == 'check_results' %}
-                <div class="breadcrumb-item current">Check Results</div>
-            {% elif request.resolver_match.url_name == 'manage_results' %}
-                <div class="breadcrumb-item current">Manage Results</div>
-            {% elif request.resolver_match.url_name == 'add_subject_marks' %}
-                <div class="breadcrumb-item current">Upload Results</div>
-            {% elif request.resolver_match.url_name == 'student_list' %}
-                <div class="breadcrumb-item current">Students</div>
-            {% elif request.resolver_match.url_name == 'login' %}
-                <div class="breadcrumb-item current">Login</div>
-            {% else %}
-                <div class="breadcrumb-item current">Dashboard</div>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
 
 </div>
 
