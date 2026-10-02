@@ -46,7 +46,7 @@
                     {% if student.photo %}
                         <img src="{{ student.photo.url }}" alt="{{ student.full_name }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/100x100/e5e7eb/6b7280?text=No+Photo" alt="No photo">
+                        <img src="{% static 'img/westland-placeholder.png' %}" alt="No photo of {{ student.full_name }} yet" loading="lazy" width="235" height="237">
                     {% endif %}
                 </div>
 

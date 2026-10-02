@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Import Results &middot; Westland International School{% endblock %}
+
+{% block extra_css %}
+{% comment %}
+    import.css is self-contained: it declares its own tokens, grid, buttons
+    and table, and reads nothing from tokens.css or Bootstrap. Only the page
+    shell (nav, footer, messages) comes from the shared layout.
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/import.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="import-container">
+
+    <div class="imp-header">
+        <div class="imp-header-text">
+            <span class="imp-eyebrow">Examinations Office</span>
+            <h1>Import Results From CSV</h1>
+            <p>
+                Upload every mark for one mock at once. Nothing is saved until
+                you confirm the preview.
+            </p>
+        </div>
+        <a class="imp-btn imp-btn-ghost" href="{% url 'manage_results' %}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to results
+        </a>
+    </div>
+
+    {% if rows is None %}
+
+        {# ---------- STEP 1: upload ---------- #}
+        <span class="imp-step" data-step="1">Choose a file</span>
+
+        <div class="imp-split">
+            <form method="post" enctype="multipart/form-data" class="imp-panel">
+                {% csrf_token %}
+                <div class="imp-panel-body">
+                    <h2 class="imp-panel-title">Upload</h2>
+
+                    <label class="imp-sr-only" for="file">Results CSV file</label>
+                    <input class="imp-file" type="file" name="file" id="file"
+                           accept=".csv,.txt,.tsv,text/csv"
+                           aria-describedby="file-help" required>
+                    <p class="imp-help" id="file-help">
+                        One mock per file. Comma, semicolon, tab or pipe
+                        separated. UTF-8, up to 5,000 rows.
+                    </p>
+                </div>
+                <div class="imp-actions">
+                    <a class="imp-btn imp-btn-ghost" href="{% url 'manage_results' %}">Cancel</a>
+                    <button class="imp-btn imp-btn-primary" type="submit">Preview import</button>
+                </div>
+            </form>
+
+            <div class="imp-stack">
+                <div class="imp-panel">
+                    <div class="imp-panel-body">
+                        <h2 class="imp-panel-title">Expected columns</h2>
+                        <dl class="imp-ref">
+                            <dt><code>index_number</code></dt>
+                            <dd>Required. Also accepted: <code>index_no</code>, <code>index</code>. Must match an existing student.</dd>
+
+                            <dt><code>mock_number</code></dt>
+                            <dd>Required. Also accepted: <code>mock</code>, <code>exam</code>.</dd>
+
+                            <dt>Subject marks</dt>
+                            <dd>
+                                All ten required, whole numbers 0&ndash;100:
+                                <code>maths</code>, <code>english</code>,
+                                <code>science</code>, <code>social_studies</code>,
+                                <code>rme</code>, <code>computing</code>,
+                                <code>career_tech</code>, <code>cad</code>,
+                                <code>asante_twi</code>, <code>french</code>.
+                            </dd>
+
+                            <dt><code>remark</code></dt>
+                            <dd>Optional. Also accepted: <code>remarks</code>.</dd>
+                        </dl>
+                        <a class="imp-btn imp-btn-ghost imp-btn-sm"
+                           href="{% url 'result_import' %}?template=csv">
+                            Download a template
+                        </a>
+                    </div>
+                </div>
+
+                <div class="imp-panel">
+                    <div class="imp-panel-body">
+                        <h2 class="imp-panel-title">What happens</h2>
+                        <ul class="imp-rules">
+                            <li>Students are matched on index number. An unknown index number is <strong>rejected</strong>, so import the students first.</li>
+                            <li>A mock that already has results is <strong>skipped</strong>, never overwritten.</li>
+                            <li>A blank or out-of-range mark is an error on that line only; the rest still import.</li>
+                            <li>The preview shows each candidate's average and aggregate, so a transposition is visible before you commit.</li>
+                            <li>Nothing is written until you confirm.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        {# ---------- STEP 2: preview + confirm ---------- #}
+        <span class="imp-step" data-step="2">Review and confirm</span>
+
+        {% comment %}
+            Each counter pairs a number with a word and an icon, so the state
+            survives greyscale and colour blindness.
+        {% endcomment %}
+        <div class="imp-stats">
+            <div class="imp-stat is-new">
+                <span class="imp-stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                </span>
+                <div>
+                    <div class="imp-stat-figure">{{ new_count }}</div>
+                    <div class="imp-stat-label">Will be created</div>
+                </div>
+            </div>
+
+            <div class="imp-stat">
+                <span class="imp-stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-5h2v2h-2zm0-8h2v6h-2z"/>
+                    </svg>
+                </span>
+                <div>
+                    <div class="imp-stat-figure">{{ skip_count }}</div>
+                    <div class="imp-stat-label">Skipped, already exist</div>
+                </div>
+            </div>
+
+            <div class="imp-stat {% if error_count %}is-error{% endif %}">
+                <span class="imp-stat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </span>
+                <div>
+                    <div class="imp-stat-figure">{{ error_count }}</div>
+                    <div class="imp-stat-label">Rejected, bad rows</div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="confirm" value="1">
+
+            <div class="imp-panel">
+                <div class="imp-bar">
+                    <span class="imp-meta">Preview &mdash; nothing saved yet</span>
+                    <span class="imp-meta">{{ rows|length }} row(s) read</span>
+                </div>
+
+                <div class="imp-table-wrap">
+                    <table class="imp-table">
+                        <caption class="imp-sr-only">Preview of rows parsed from the uploaded results file.</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Line</th>
+                                <th scope="col">Index number</th>
+                                <th scope="col">Student</th>
+                                <th scope="col">Mock</th>
+                                <th scope="col" class="imp-num">Average</th>
+                                <th scope="col" class="imp-num">Aggregate</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                                <tr class="{% if row.status == 'error' %}is-error{% elif row.status == 'skip' %}is-skip{% endif %}">
+                                    <td class="imp-line">{{ row.line }}</td>
+                                    <td class="imp-mono">{{ row.index_number|default:"&mdash;" }}</td>
+                                    <td>{{ row.student_name|default:"&mdash;" }}</td>
+                                    <td class="imp-mono">{{ row.mock_number|default:"&mdash;" }}</td>
+                                    <td class="imp-num">
+                                        {% if row.average != "" %}{{ row.average }}{% else %}&mdash;{% endif %}
+                                    </td>
+                                    <td class="imp-num">
+                                        {% if row.aggregate != "" %}{{ row.aggregate }}{% else %}&mdash;{% endif %}
+                                    </td>
+                                    <td>
+                                        {% if row.status == 'new' %}
+                                            <span class="imp-pill is-ok">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                                </svg>
+                                                Create
+                                            </span>
+                                        {% elif row.status == 'skip' %}
+                                            <span class="imp-pill is-skip">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-5h2v2h-2zm0-8h2v6h-2z"/>
+                                                </svg>
+                                                Skip
+                                            </span>
+                                            <span class="imp-reason">{{ row.reason }}</span>
+                                        {% else %}
+                                            <span class="imp-pill is-bad">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                                </svg>
+                                                Error
+                                            </span>
+                                            <span class="imp-reason">{{ row.reason }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7" class="imp-empty">
+                                        The file contained a header but no data rows.
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="imp-footer">
+                    <p class="imp-footer-note">
+                        {% if new_count %}
+                            {{ new_count }} result{{ new_count|pluralize }} will be created.
+                        {% else %}
+                            Nothing will be created &mdash; every row was skipped or rejected.
+                        {% endif %}
+                    </p>
+                    <div class="imp-actions">
+                        <a class="imp-btn imp-btn-ghost" href="{% url 'result_import' %}">Start over</a>
+                        <button class="imp-btn imp-btn-success" type="submit"
+                                {% if not new_count %}disabled{% endif %}>
+                            Import {{ new_count }} result{{ new_count|pluralize }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    {% endif %}
+
+</div>
+{% endblock %}

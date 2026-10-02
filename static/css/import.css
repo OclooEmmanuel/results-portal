@@ -1,0 +1,809 @@
+/* ==========================================================================
+   RESULTS CSV IMPORT — static/css/import.css
+   Fully self-contained. This sheet declares its own design tokens, its own
+   two-column grid, its own buttons, panels and table. It reads nothing from
+   tokens.css and borrows no Bootstrap classes, so it renders identically
+   whether or not the rest of the project is restyled.
+
+   Every rule is scoped under .import-container and every class is prefixed
+   `imp-`, so nothing here can leak into another page.
+
+   The preview table is the screen that matters. A marks sheet runs to several
+   hundred rows and staff must see, at a glance, which rows will be created,
+   skipped or rejected. So: sticky header, hairline rows, tabular numerals on
+   every figure, and status carried by a word and an icon rather than by
+   background colour alone.
+   ========================================================================== */
+
+.import-container {
+    /* ---- Palette -------------------------------------------------
+       Slate neutrals for structure; the school gold is an accent only,
+       never text on white (it fails contrast there). Status colours are
+       dark enough to clear 4.5:1 on their own tinted backgrounds. */
+    --imp-ink-050: #f8fafc;
+    --imp-ink-100: #f1f5f9;
+    --imp-ink-400: #94a3b8;
+    --imp-ink-500: #64748b;
+    --imp-ink-600: #475569;
+    --imp-ink-700: #334155;
+    --imp-ink-800: #1e293b;
+    --imp-ink-900: #0f172a;
+
+    --imp-surface: #ffffff;
+
+    --imp-border: #e2e8f0;
+    --imp-border-strong: #cbd5e1;
+
+    --imp-brand-ink: #92400e;
+
+    --imp-info: #1d4ed8;
+
+    --imp-success: #15803d;
+    --imp-success-tint: #f0fdf4;
+
+    --imp-danger: #b91c1c;
+    --imp-danger-tint: #fef2f2;
+
+    --imp-neutral-tint: #f1f5f9;
+    --imp-neutral-border: #cbd5e1;
+
+    /* ---- Spacing scale (4px base) --------------------------------- */
+    --imp-1: 4px;
+    --imp-2: 8px;
+    --imp-3: 12px;
+    --imp-4: 16px;
+    --imp-5: 24px;
+    --imp-6: 32px;
+    --imp-7: 48px;
+
+    /* ---- Radii ----------------------------------------------------- */
+    --imp-r-sm: 6px;
+    --imp-r-md: 10px;
+    --imp-r-lg: 14px;
+    --imp-r-pill: 999px;
+
+    /* ---- Elevation ------------------------------------------------- */
+    --imp-shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --imp-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+
+    /* ---- Type ------------------------------------------------------ */
+    --imp-text-xs: 12px;
+    --imp-text-sm: 13.5px;
+    --imp-text-base: 15px;
+    --imp-text-xl: 22px;
+    --imp-text-2xl: 28px;
+
+    --imp-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+    --imp-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --imp-tracking-wide: 0.08em;
+    --imp-leading-snug: 1.45;
+    --imp-leading-relaxed: 1.65;
+
+    --imp-duration: 160ms;
+    --imp-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--imp-6) var(--imp-5) var(--imp-7);
+    font-family: var(--imp-sans);
+    font-size: var(--imp-text-base);
+    line-height: var(--imp-leading-relaxed);
+    color: var(--imp-ink-900);
+    background: transparent;
+}
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY PRIMITIVES
+   ───────────────────────────────────────────── */
+
+.import-container h1 {
+    margin: 0 0 var(--imp-2);
+    font-size: var(--imp-text-2xl);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--imp-ink-900);
+}
+
+.import-container h2 {
+    margin: 0;
+    font-size: var(--imp-text-base);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--imp-ink-900);
+}
+
+.import-container p {
+    margin: 0;
+}
+
+.import-container a {
+    color: var(--imp-info);
+}
+
+.import-container code {
+    padding: 2px 6px;
+    font-family: var(--imp-mono);
+    font-size: 0.85em;
+    color: var(--imp-ink-800);
+    background: var(--imp-ink-100);
+    border: 1px solid var(--imp-border);
+    border-radius: var(--imp-r-sm);
+    white-space: nowrap;
+}
+
+.import-container .imp-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.import-container .imp-eyebrow {
+    display: block;
+    margin-bottom: var(--imp-1);
+    font-size: var(--imp-text-xs);
+    font-weight: 700;
+    letter-spacing: var(--imp-tracking-wide);
+    text-transform: uppercase;
+    color: var(--imp-brand-ink);
+}
+
+.import-container .imp-meta {
+    font-size: var(--imp-text-sm);
+    color: var(--imp-ink-500);
+}
+
+.import-container .imp-mono {
+    font-family: var(--imp-mono);
+}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+   ───────────────────────────────────────────── */
+
+.imp-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--imp-4);
+    margin-bottom: var(--imp-5);
+}
+
+.imp-header-text {
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.imp-header-text p {
+    max-width: 62ch;
+    font-size: var(--imp-text-base);
+    color: var(--imp-ink-600);
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+   Local rather than .btn, so this sheet has no
+   dependency on a shared button class.
+   ───────────────────────────────────────────── */
+
+.import-container .imp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--imp-2);
+    min-height: 44px;                  /* comfortable touch target */
+    padding: var(--imp-2) var(--imp-4);
+    font-family: inherit;
+    font-size: var(--imp-text-base);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: var(--imp-r-md);
+    cursor: pointer;
+    transition: background-color var(--imp-duration) var(--imp-ease),
+                border-color var(--imp-duration) var(--imp-ease),
+                box-shadow var(--imp-duration) var(--imp-ease);
+}
+
+.import-container .imp-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: currentColor;
+}
+
+.import-container .imp-btn:disabled,
+.import-container .imp-btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.import-container .imp-btn:focus-visible {
+    outline: 2px solid var(--imp-info);
+    outline-offset: 2px;
+}
+
+/* Primary: the one committing action per screen. */
+.import-container .imp-btn-primary {
+    color: #ffffff;
+    background: var(--imp-ink-900);
+    border-color: var(--imp-ink-900);
+    box-shadow: var(--imp-shadow-sm);
+}
+
+.import-container .imp-btn-primary:hover:not(:disabled) {
+    background: var(--imp-ink-700);
+    border-color: var(--imp-ink-700);
+}
+
+/* Success: the final commit on the preview step. */
+.import-container .imp-btn-success {
+    color: #ffffff;
+    background: var(--imp-success);
+    border-color: var(--imp-success);
+    box-shadow: var(--imp-shadow-sm);
+}
+
+.import-container .imp-btn-success:hover:not(:disabled) {
+    background: #166534;
+    border-color: #166534;
+}
+
+/* Ghost: navigation and the template download. */
+.import-container .imp-btn-ghost {
+    color: var(--imp-ink-700);
+    background: var(--imp-surface);
+    border-color: var(--imp-border-strong);
+}
+
+.import-container .imp-btn-ghost:hover:not(:disabled) {
+    color: var(--imp-ink-900);
+    background: var(--imp-ink-050);
+    border-color: var(--imp-ink-400);
+}
+
+.import-container .imp-btn-sm {
+    min-height: 36px;
+    padding: var(--imp-1) var(--imp-3);
+    font-size: var(--imp-text-sm);
+}
+
+/* ─────────────────────────────────────────────
+   STEP MARKER
+   Two steps only, so a plain numbered label
+   beats a stepper widget.
+   ───────────────────────────────────────────── */
+
+.imp-step {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--imp-2);
+    margin-bottom: var(--imp-4);
+    font-size: var(--imp-text-xs);
+    font-weight: 700;
+    letter-spacing: var(--imp-tracking-wide);
+    text-transform: uppercase;
+    color: var(--imp-ink-700);
+}
+
+.imp-step::before {
+    content: attr(data-step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: var(--imp-text-xs);
+    color: #ffffff;
+    background: var(--imp-ink-900);
+    border-radius: var(--imp-r-pill);
+}
+
+/* ─────────────────────────────────────────────
+   LAYOUT
+   ───────────────────────────────────────────── */
+
+.imp-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--imp-5);
+    align-items: start;
+}
+
+.imp-stack > * + * {
+    margin-top: var(--imp-4);
+}
+
+.imp-panel {
+    background: var(--imp-surface);
+    border: 1px solid var(--imp-border);
+    border-radius: var(--imp-r-lg);
+    box-shadow: var(--imp-shadow-sm);
+    overflow: hidden;
+}
+
+.imp-panel-title {
+    margin: 0 0 var(--imp-4);
+    font-size: var(--imp-text-xs);
+    font-weight: 700;
+    letter-spacing: var(--imp-tracking-wide);
+    text-transform: uppercase;
+    color: var(--imp-ink-600);
+}
+
+.imp-panel-body {
+    padding: var(--imp-5);
+}
+
+/* ─────────────────────────────────────────────
+   FILE INPUT
+   A dashed drop target. The whole box is the
+   hit area, which matters on touch.
+   ───────────────────────────────────────────── */
+
+.imp-file {
+    display: block;
+    width: 100%;
+    min-height: 148px;
+    padding: var(--imp-5);
+    font-family: inherit;
+    font-size: var(--imp-text-sm);
+    line-height: var(--imp-leading-relaxed);
+    color: var(--imp-ink-600);
+    text-align: center;
+    background: var(--imp-ink-050);
+    border: 2px dashed var(--imp-border-strong);
+    border-radius: var(--imp-r-lg);
+    cursor: pointer;
+    transition: border-color var(--imp-duration) var(--imp-ease),
+                background-color var(--imp-duration) var(--imp-ease);
+}
+
+.imp-file:hover {
+    background: var(--imp-surface);
+    border-color: var(--imp-info);
+}
+
+.imp-file:focus-visible {
+    outline: 2px solid var(--imp-info);
+    outline-offset: 2px;
+    background: var(--imp-surface);
+    border-color: var(--imp-info);
+}
+
+.imp-file::file-selector-button {
+    margin-right: var(--imp-4);
+    padding: var(--imp-2) var(--imp-4);
+    font-family: inherit;
+    font-size: var(--imp-text-sm);
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--imp-ink-900);
+    border: 1px solid var(--imp-ink-900);
+    border-radius: var(--imp-r-sm);
+    cursor: pointer;
+    transition: background-color var(--imp-duration) var(--imp-ease),
+                border-color var(--imp-duration) var(--imp-ease);
+}
+
+.imp-file::file-selector-button:hover {
+    background: var(--imp-ink-700);
+    border-color: var(--imp-ink-700);
+}
+
+.imp-help {
+    margin-top: var(--imp-3);
+    font-size: var(--imp-text-sm);
+    line-height: var(--imp-leading-snug);
+    color: var(--imp-ink-500);
+}
+
+/* ─────────────────────────────────────────────
+   PANEL FOOTER / ACTIONS
+   ───────────────────────────────────────────── */
+
+.imp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--imp-2);
+    justify-content: flex-end;
+    padding: var(--imp-4) var(--imp-5);
+    background: var(--imp-ink-050);
+    border-top: 1px solid var(--imp-border);
+}
+
+/* ─────────────────────────────────────────────
+   REFERENCE PANELS
+   ───────────────────────────────────────────── */
+
+/* A definition list reads better than a table for "what this column means",
+   and it wraps instead of forcing the panel wide. */
+.imp-ref {
+    margin: 0;
+}
+
+.imp-ref dt {
+    font-size: var(--imp-text-sm);
+    font-weight: 700;
+    color: var(--imp-ink-900);
+}
+
+.imp-ref dd {
+    margin: 0 0 var(--imp-3);
+    font-size: var(--imp-text-sm);
+    line-height: var(--imp-leading-snug);
+    color: var(--imp-ink-600);
+}
+
+.imp-ref dd:last-child {
+    margin-bottom: 0;
+}
+
+.imp-ref + .imp-btn {
+    margin-top: var(--imp-2);
+}
+
+.imp-rules {
+    margin: 0;
+    padding-left: var(--imp-5);
+    font-size: var(--imp-text-sm);
+    line-height: var(--imp-leading-relaxed);
+    color: var(--imp-ink-600);
+}
+
+.imp-rules li {
+    margin-bottom: var(--imp-2);
+}
+
+.imp-rules li:last-child {
+    margin-bottom: 0;
+}
+
+.imp-rules strong {
+    color: var(--imp-ink-800);
+}
+
+/* ─────────────────────────────────────────────
+   SUMMARY STATS
+   Three counters. Each carries a word, a number
+   and an icon, so the state survives greyscale
+   and colour blindness.
+   ───────────────────────────────────────────── */
+
+.imp-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--imp-3);
+    margin-bottom: var(--imp-4);
+}
+
+.imp-stat {
+    display: flex;
+    align-items: center;
+    gap: var(--imp-3);
+    padding: var(--imp-4);
+    background: var(--imp-surface);
+    border: 1px solid var(--imp-border);
+    border-left: 4px solid var(--imp-neutral-border);
+    border-radius: var(--imp-r-md);
+    box-shadow: var(--imp-shadow-xs);
+}
+
+.imp-stat.is-new {
+    border-left-color: var(--imp-success);
+}
+
+.imp-stat.is-error {
+    border-left-color: var(--imp-danger);
+}
+
+.imp-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    color: var(--imp-ink-600);
+    background: var(--imp-neutral-tint);
+    border-radius: var(--imp-r-sm);
+}
+
+.imp-stat-icon svg {
+    width: 19px;
+    height: 19px;
+    fill: currentColor;
+}
+
+.imp-stat.is-new .imp-stat-icon {
+    color: var(--imp-success);
+    background: var(--imp-success-tint);
+}
+
+.imp-stat.is-error .imp-stat-icon {
+    color: var(--imp-danger);
+    background: var(--imp-danger-tint);
+}
+
+.imp-stat-figure {
+    font-size: var(--imp-text-xl);
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: var(--imp-ink-900);
+}
+
+.imp-stat-label {
+    font-size: var(--imp-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--imp-ink-600);
+}
+
+/* ─────────────────────────────────────────────
+   PREVIEW PANEL
+   ───────────────────────────────────────────── */
+
+.imp-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--imp-2);
+    padding: var(--imp-4) var(--imp-5);
+    background: var(--imp-surface);
+    border-bottom: 1px solid var(--imp-border);
+}
+
+.imp-table-wrap {
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.imp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--imp-text-sm);
+}
+
+.imp-table th,
+.imp-table td {
+    padding: var(--imp-3) var(--imp-4);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--imp-border);
+}
+
+.imp-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-size: var(--imp-text-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--imp-ink-600);
+    background: var(--imp-ink-100);
+    border-bottom: 1px solid var(--imp-border-strong);
+    white-space: nowrap;
+}
+
+.imp-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.imp-table tbody tr:hover td {
+    background: var(--imp-ink-050);
+}
+
+.imp-table .imp-num {
+    text-align: right;
+    font-family: var(--imp-mono);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.imp-table .imp-line {
+    font-family: var(--imp-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--imp-ink-500);
+}
+
+/* Row tints are reinforcement only: the Status column always states the
+   outcome in words. */
+.imp-table tr.is-error td,
+.imp-table tr.is-error:hover td {
+    background: var(--imp-danger-tint);
+}
+
+/* Marker in the left gutter, so a rejected row stays findable while
+   scrolling a long preview without relying on the tint. */
+.imp-table tr.is-error td:first-child {
+    box-shadow: inset 3px 0 0 var(--imp-danger);
+}
+
+.imp-table tr.is-skip td,
+.imp-table tr.is-skip:hover td {
+    color: var(--imp-ink-600);
+}
+
+.imp-table .imp-empty {
+    padding: var(--imp-6);
+    text-align: center;
+    color: var(--imp-ink-500);
+}
+
+.imp-reason {
+    display: block;
+    margin-top: 3px;
+    font-size: var(--imp-text-xs);
+    line-height: var(--imp-leading-snug);
+    color: var(--imp-ink-600);
+}
+
+/* ─────────────────────────────────────────────
+   STATUS PILLS
+   ───────────────────────────────────────────── */
+
+.imp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--imp-1);
+    padding: 3px var(--imp-2);
+    font-size: var(--imp-text-xs);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: var(--imp-r-pill);
+}
+
+.imp-pill svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    fill: currentColor;
+}
+
+.imp-pill.is-ok {
+    color: var(--imp-success);
+    background: var(--imp-success-tint);
+    border-color: #bbf7d0;
+}
+
+.imp-pill.is-skip {
+    color: var(--imp-ink-700);
+    background: var(--imp-neutral-tint);
+    border-color: var(--imp-border-strong);
+}
+
+.imp-pill.is-bad {
+    color: var(--imp-danger);
+    background: var(--imp-danger-tint);
+    border-color: #fecaca;
+}
+
+/* ─────────────────────────────────────────────
+   PREVIEW FOOTER
+   ───────────────────────────────────────────── */
+
+.imp-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--imp-3);
+    padding: var(--imp-4) var(--imp-5);
+    background: var(--imp-ink-050);
+    border-top: 1px solid var(--imp-border);
+}
+
+.imp-footer-note {
+    font-size: var(--imp-text-sm);
+    color: var(--imp-ink-600);
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    .import-container {
+        padding: var(--imp-5) var(--imp-4);
+    }
+
+    .imp-split {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--imp-4);
+    }
+
+    .imp-stats {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .imp-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 560px) {
+    .import-container {
+        padding: var(--imp-4) var(--imp-3);
+    }
+
+    .import-container h1 {
+        font-size: var(--imp-text-xl);
+    }
+
+    .imp-panel-body,
+    .imp-bar,
+    .imp-footer {
+        padding: var(--imp-4);
+    }
+
+    .imp-actions,
+    .imp-footer {
+        width: 100%;
+    }
+
+    .imp-actions .imp-btn,
+    .imp-footer .imp-btn {
+        flex: 1 1 140px;
+    }
+
+    .imp-table th,
+    .imp-table td {
+        padding: var(--imp-2) var(--imp-3);
+    }
+
+    /* 16px prevents iOS Safari zooming the viewport on focus. */
+    .imp-file {
+        font-size: var(--imp-text-base);
+    }
+}
+
+/* ─────────────────────────────────────────────
+   MOTION
+   ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .import-container *,
+    .import-container *::before,
+    .import-container *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* ─────────────────────────────────────────────
+   PRINT
+   Tints disappear on paper, so the words in the
+   Status column are what survives.
+   ───────────────────────────────────────────── */
+
+@media print {
+    .imp-actions,
+    .imp-footer,
+    .imp-btn {
+        display: none;
+    }
+
+    .imp-panel {
+        box-shadow: none;
+        border-color: #999;
+    }
+}

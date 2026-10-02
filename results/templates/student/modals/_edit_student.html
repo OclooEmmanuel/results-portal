@@ -1,3 +1,4 @@
+{% load static %}
 <div class="modal fade" id="editStudent{{ student.id }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -37,10 +38,20 @@
 
           </div>
           <div class="mb-3">
-            {% if student.photo %}
             <p>Current photo:</p>
-            <img src="{{ student.photo.url}}" alt="no photo" width="120px" height="120px"  class="img-thumbnail">
-          {%endif%}
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}"
+                   alt="Current photo of {{ student.full_name }}"
+                   width="120"
+                   height="120"
+                   class="img-thumbnail">
+            {% else %}
+              <img src="{% static 'img/westland-placeholder.png' %}"
+                   alt="No photo of {{ student.full_name }} yet"
+                   width="120"
+                   height="120"
+                   class="img-thumbnail">
+            {% endif %}
           </div>
 
 

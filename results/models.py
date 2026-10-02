@@ -3,6 +3,21 @@ from students.models import Student
 
 
 class Result(models.Model):
+    SUBJECT_FIELDS = (
+        ("maths", "Mathematics"),
+        ("english", "English Language"),
+        ("science", "Integrated Science"),
+        ("social_studies", "Social Studies"),
+        ("rme", "R.M.E"),
+        ("computing", "Computing"),
+        ("carear_tech", "Career Technology"),
+        ("cad", "Creative Arts & Design"),
+        ("asante_twi", "Asante Twi"),
+        ("french", "French"),
+    )
+
+    CORE_SUBJECTS = ("english", "maths", "science", "social_studies")
+
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
@@ -29,10 +44,7 @@ class Result(models.Model):
         return f"{self.student} - Mock {self.mock_number}"
 
     @staticmethod
-    def get_grade( score):
-        """
-        Grade Scale (1-9)
-        """
+    def get_grade(score):
         if score >= 85:
             return 1
         elif score >= 80:
@@ -54,9 +66,6 @@ class Result(models.Model):
 
     @staticmethod
     def get_grade_remark(grade):
-        """
-        Official Interpretation
-        """
         remarks = {
             1: "Highest",
             2: "Higher",
@@ -68,6 +77,48 @@ class Result(models.Model):
             8: "Lower",
             9: "Lowest",
         }
-        return remarks.get(grade,'')
+        return remarks.get(grade, '')
 
+    def get_subjects(self):
+        rows = []
+        for field, label in self.SUBJECT_FIELDS:
+            score = getattr(self, field)
+            grade = self.get_grade(score)
+            rows.append({
+                "subject": label,
+                "score": score,
+                "grade": grade,
+                "remark": self.get_grade_remark(grade),
+            })
+        return rows
 
+    def get_aggregate(self):
+        core = [self.get_grade(getattr(self, f)) for f in self.CORE_SUBJECTS]
+        electives = sorted(
+            self.get_grade(getattr(self, f))
+            for f, _ in self.SUBJECT_FIELDS
+            if f not in self.CORE_SUBJECTS
+        )
+        return sum(core) + sum(electives[:2])
+
+    def get_total(self):
+        return sum(getattr(self, field) for field, _ in self.SUBJECT_FIELDS)
+
+    def get_average(self):
+        return round(self.get_total() / len(self.SUBJECT_FIELDS), 2)
+
+    def build_report(self):
+        subjects = self.get_subjects()
+        average = self.get_average()
+        aggregate = self.get_aggregate()
+        total = self.get_total()
+        overall = "PASS" if average >= 50 else "FAIL"
+        return {
+            "student": self.student,
+            "mock_number": self.mock_number,
+            "subjects": subjects,
+            "total": total,
+            "average": average,
+            "aggregate": aggregate,
+            "overall_result": overall,
+        }

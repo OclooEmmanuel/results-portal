@@ -20,6 +20,7 @@ urlpatterns = [
     path('result/slip', views.student_results, name='student_results'),
     path('result/check/', views.check_results, name='check_results'),
     path('result/add/', views.add_subject_marks, name='add_subject_marks'),
+    path('result/import/', views.result_import, name='result_import'),
     #------------------------------------------------------------------------
     path('result/manage/', views.manage_results, name='manage_results'),
     path('result/edit/<int:result_id>/', views.edit_result, name='edit_result'),

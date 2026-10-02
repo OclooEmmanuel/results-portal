@@ -66,9 +66,12 @@
                          class="student-photo"
                          alt="{{ r.student.full_name }}">
                 {% else %}
-                    <img src="https://via.placeholder.com/80x80/e5e7eb/6b7280?text=No+Photo"
+                    <img src="{% static 'img/westland-placeholder.png' %}"
                          class="student-photo"
-                         alt="No photo">
+                         alt="No photo of {{ r.student.full_name }} yet"
+                         loading="lazy"
+                         width="235"
+                         height="237">
                 {% endif %}
 
                 <div class="student-info">
